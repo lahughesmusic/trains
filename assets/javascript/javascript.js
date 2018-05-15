@@ -52,10 +52,13 @@ database.ref().on('child_added', function(childSnapshot){
             var tFrequency = $('#frequency-input').val().trim();
             var firstTime = $('#firstTrainTime-input').val().trim();
         
-            trainName = $('#trainName-input').val().trim();
-            destination = $('#destination-input').val().trim();
-            firstTrain = $('#firstTrainTime-input').val().trim();
-            frequency = $('#frequency-input').val().trim();
+
+
+            // change
+            trainName = childSnapshot.val().trainName;
+            destination = childSnapshot.val().destination;
+            firstTrain = childSnapshot.val().firstTime;
+            frequency = childSnapshot.val().frequency;
 
     
         
@@ -72,11 +75,11 @@ database.ref().on('child_added', function(childSnapshot){
                 console.log("DIFFERENCE IN TIME: " + diffTime);
             
                 // Time apart (remainder)
-                var tRemainder = diffTime % tFrequency;
+                var tRemainder = diffTime % frequency;
                 console.log(tRemainder);
             
                 // Minute Until Train
-                var tMinutesTillTrain = tFrequency - tRemainder;
+                var tMinutesTillTrain = frequency - tRemainder;
                 console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
             
                 // Next Train
@@ -84,11 +87,11 @@ database.ref().on('child_added', function(childSnapshot){
                 console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
         
         
-            $("#train-table > tbody").prepend("<tr><td>" + childSnapshot.val().trainName + "</td><td>" + childSnapshot.val().destination + "</td><td>" +
-            childSnapshot.val().frequency + "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td></tr>");
+            $("#train-table > tbody").prepend("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
+            frequency + "</td><td>" + nextTrain.format("hh:mm")+ "</td><td>" + tMinutesTillTrain + "</td></tr>");
 
             
-
+                                                // change next train format
         }, function(errorObject) {
             console.log("Errors handled: " + errorObject.code);
         });
